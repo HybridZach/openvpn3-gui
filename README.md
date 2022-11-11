@@ -14,6 +14,7 @@ Going to implement openvpn3 python API and DBUS functionality eventually also (F
   <dd>WAN IP checker</dd>
   <dd>Manual Profile Select & Connect</dd>
   <dd>CLI Args (Profile Select)</dd>
+  <dd>Config File/ConfigParser</dd>
 </dl>
 
 [^1]: Note, this is in *active* development and may become unstable. <br />
