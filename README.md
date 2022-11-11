@@ -3,8 +3,8 @@
 
 This application seeks to provide a basic/minimalistic GUI for openvpn3 CLI using Python & QT5.
 
-Eventually it will be cross-platform but for now its Linux only.
-Plans to upload the initial stable(ish) version, then go from there.
+Eventually it will be cross-platform but for now its Linux only.<br />
+Plans to upload the initial stable(ish) version, then go from there.<br />
 Going to implement openvpn3 python API and DBUS functionality eventually also (For now it uses system CLI calls)
 
 
