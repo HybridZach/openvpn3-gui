@@ -2,12 +2,12 @@
 import logging
 import os
 import sys
+import httplib2
 from configparser import ConfigParser
 
-import httplib2
 # From imports
 from PyQt5 import QtCore, QtWidgets, QtGui
-
+# This calls a manual cache removal function
 from gsl import remove_cache
 
 # Set config file and global variables
@@ -31,14 +31,13 @@ else:
 
 # Create global for current connected vpn device (if exists)
 from gsl import vpn_tun_grab
-
 vpn_tun_grab()
 os.chdir('/tmp/vpn_gui/tun/')
 stream_dc = os.popen('cat ' + 'tmp*')
 text = stream_dc.read().replace('\n', '')
 vpn_device = text
 
-# Check for CL argv and set acordingly
+# Check for CLI argv and set acordingly
 if len(sys.argv) > 1:
     config_ = sys.argv[1]
     os.chdir(profile_dir)
@@ -46,6 +45,7 @@ if len(sys.argv) > 1:
     os.popen("openvpn3 session-manage -I " + vpn_device + " --disconnect")
     print("\nWaiting 2 seconds for disconnection, and connecting via CLI arg \n")
     os.popen('sleep 2')
+    # Connect using sys.argv profile
     stream_con = os.popen("openvpn3 session-start --config" + " " + config_)
     text = stream_con.read()
     print("\n" + text + "\n")
@@ -168,7 +168,8 @@ class UiMainWindow(object):
         self.vpn_connect_button.clicked.connect(self.vpn_connect_)
         self.input_button.clicked.connect(self.showinputdialog)
 
-    # Functions (Mainly of buttons)
+    # *GUI Functions (Mainly of buttons):*
+    # VPN disconnct button
     def vpn_dc_(self):
         os.chdir(profile_dir)
         print(os.getcwd())
@@ -179,8 +180,8 @@ class UiMainWindow(object):
         self.label.setText(text)
         self.label.adjustSize()
 
+    # VPN status button
     def vpn_status(self):
-        # from gsl import final_list
         from gsl import vpn_status_grab
         vpn_status_grab()
         os.chdir('/tmp/vpn_gui')
@@ -189,6 +190,7 @@ class UiMainWindow(object):
         self.label.setText(text)
         remove_cache()
 
+    # VPN debug button (to print debug.log in GUI (Unused for now))
     """def debug_(self):
         pathlib.Path(__file__).parent.resolve()
         stream_debug = os.popen('tail -n 5 debug.log')
@@ -196,6 +198,7 @@ class UiMainWindow(object):
         self.label.setText(debug_output)
         self.label.adjustSize()"""
 
+    # VPN connect button
     def vpn_connect_(self):
         # Making sure VPN is disconnected first if connected to begin with
         os.popen("openvpn3 session-manage -I " + vpn_device + " --disconnect")
@@ -210,15 +213,16 @@ class UiMainWindow(object):
         self.label.setText(text)
         self.label.adjustSize()
 
+    # GUI close button
     @staticmethod
     def exit_button():
         remove_cache()
         sys.exit()
 
+    # WAN IP grabber button
     def ip_checker(self):
         # Check for internet first?
         self.label.setText('Checking for connection...')
-
         conn = httplib2.HTTPSConnectionWithTimeout("1.1.1.1", timeout=1)
         try:
             conn.request("HEAD", "/")
