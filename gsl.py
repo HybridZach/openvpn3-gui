@@ -3,8 +3,8 @@ import glob
 import itertools
 import os
 import sys
-from configparser import ConfigParser
 # From imports
+from configparser import ConfigParser
 from tempfile import mkstemp
 
 # Set config file and global variables
@@ -13,6 +13,7 @@ config = ConfigParser()
 config.read('config.ini')
 
 
+# Function to call openvpn3 sessions-list in GUI (neatened up)
 def vpn_status_grab():
     # Check to see if the VPN cache DIR somehow exists
     if glob.glob('/tmp/vpn_gui/'):
@@ -71,6 +72,7 @@ def vpn_status_grab():
         os.unlink(tmp_file_pipe)
 
 
+# Function to grab tun device via openvpn3 sessions-list
 def vpn_tun_grab():
     # Does tun dir exist?
     if glob.glob('/tmp/vpn_gui/tun'):
